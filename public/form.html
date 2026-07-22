@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo Request · Agent Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f7f7f8;
+        --card: #ffffff;
+        --line: #e8e8ec;
+        --line-strong: #d7d7de;
+        --ink: #18181b;
+        --muted: #6e6e78;
+        --muted-2: #8a8a94;
+        --accent: #6d5ef6;
+        --accent-soft: rgba(109, 94, 246, 0.1);
+        --accent-line: rgba(109, 94, 246, 0.28);
+        --btn: #18181b;
+        --btn-hover: #000000;
+        --radius: 11px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 44px 16px 72px;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 780px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: 0 1px 2px rgba(24, 24, 27, 0.04),
+          0 12px 32px -20px rgba(24, 24, 27, 0.18);
+        overflow: hidden;
+      }
+
+      .card__header {
+        padding: 22px 30px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+
+      .brand__mark {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        background: var(--ink);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .brand__sep {
+        color: var(--line-strong);
+      }
+
+      .card__header h1 {
+        margin: 16px 0 4px;
+        font-size: 21px;
+        font-weight: 600;
+        letter-spacing: -0.35px;
+      }
+
+      .card__header p {
+        margin: 0;
+        font-size: 13.5px;
+        color: var(--muted);
+      }
+
+      .prefill {
+        margin: 20px 30px -6px;
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+        padding: 11px 13px;
+        border-radius: 10px;
+        background: var(--accent-soft);
+        border: 1px solid var(--accent-line);
+        color: #4b3fd0;
+        font-size: 12.5px;
+        line-height: 1.45;
+      }
+
+      .prefill svg {
+        flex: none;
+        margin-top: 1px;
+      }
+
+      form {
+        padding: 26px 30px 30px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px 20px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .field--full {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        font-size: 12.5px;
+        font-weight: 550;
+        color: var(--ink);
+        margin-bottom: 6px;
+      }
+
+      label .req {
+        color: var(--accent);
+        margin-left: 2px;
+      }
+
+      input,
+      select,
+      textarea {
+        font-family: inherit;
+        font-size: 14px;
+        color: var(--ink);
+        background: #fff;
+        border: 1px solid var(--line-strong);
+        border-radius: var(--radius);
+        padding: 10px 12px;
+        width: 100%;
+        transition: border-color 0.14s ease, box-shadow 0.14s ease;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 44px;
+      }
+
+      input::placeholder,
+      textarea::placeholder {
+        color: var(--muted-2);
+      }
+
+      input:hover,
+      select:hover,
+      textarea:hover {
+        border-color: #c4c4cd;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-soft);
+      }
+
+      select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236e6e78' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 38px;
+        cursor: pointer;
+      }
+
+      .actions {
+        margin-top: 26px;
+        padding-top: 22px;
+        border-top: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      button {
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 550;
+        color: #fff;
+        background: var(--btn);
+        border: 1px solid var(--btn);
+        border-radius: var(--radius);
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background 0.15s ease, opacity 0.15s ease;
+      }
+
+      button:hover {
+        background: var(--btn-hover);
+      }
+
+      button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .hint b {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      @media (max-width: 560px) {
+        .card__header,
+        form {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+        .prefill {
+          margin-left: 20px;
+          margin-right: 20px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="card__header">
+        <div class="brand">
+          <span class="brand__mark">k</span>
+          <span>Agent Platform</span>
+          <span class="brand__sep">/</span>
+          <span>DemoProcess</span>
+        </div>
+        <h1>Demo Request</h1>
+        <p>Review the deal details below and submit to schedule your demo.</p>
+      </div>
+
+      <div class="prefill" id="prefillBanner" hidden>
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>We prefilled what we found for this deal — review and edit anything before submitting.</span>
+      </div>
+
+      <form action="/submit-form" method="POST">
+        <!-- request_id is injected from the ?request_id= query param below -->
+        <input type="hidden" name="request_id" id="request_id" />
+
+        <div class="grid">
+          <div class="field">
+            <label for="deal_id">Deal ID <span class="req">*</span></label>
+            <input type="text" name="deal_id" id="deal_id" placeholder="e.g. D-10428" required />
+          </div>
+
+          <div class="field">
+            <label for="deal_name">Deal Name <span class="req">*</span></label>
+            <input type="text" name="deal_name" id="deal_name" placeholder="e.g. Acme Corp – CX Automation" required />
+          </div>
+
+          <div class="field">
+            <label for="se_email">SE Email <span class="req">*</span></label>
+            <input type="email" name="se_email" id="se_email" placeholder="se@company.com" required />
+          </div>
+
+          <div class="field">
+            <label for="ae_email">AE Email <span class="req">*</span></label>
+            <input type="email" name="ae_email" id="ae_email" placeholder="ae@company.com" required />
+          </div>
+
+          <div class="field field--full">
+            <label for="products">Products to be used <span class="req">*</span></label>
+            <textarea name="products" id="products" rows="2" placeholder="e.g. AI for Work, AI for Service" required></textarea>
+          </div>
+
+          <div class="field field--full">
+            <label for="channels">Channels to be used <span class="req">*</span></label>
+            <textarea name="channels" id="channels" rows="2" placeholder="e.g. Web, WhatsApp, Voice" required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="dry_run_date">Dry Run Date <span class="req">*</span></label>
+            <input type="date" name="dry_run_date" id="dry_run_date" required />
+          </div>
+
+          <div class="field">
+            <label for="demo_date">Demo Date <span class="req">*</span></label>
+            <input type="date" name="demo_date" id="demo_date" required />
+          </div>
+
+          <div class="field">
+            <label for="demo_type">Demo Type <span class="req">*</span></label>
+            <select name="demo_type" id="demo_type" required>
+              <option value="" disabled selected>Select a type</option>
+              <option value="POC">POC</option>
+              <option value="Custom Demo">Custom Demo</option>
+              <option value="Pilot">Pilot</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="demo_region">Demo Region <span class="req">*</span></label>
+            <input type="text" name="demo_region" id="demo_region" placeholder="e.g. NA, EMEA, APAC" required />
+          </div>
+
+          <div class="field field--full">
+            <label for="third_party">Third-Party (if any)</label>
+            <input type="text" name="third_party" id="third_party" placeholder="e.g. Salesforce, Genesys — leave blank if none" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="submitBtn">Submit request</button>
+          <span class="hint">Fields marked <b>*</b> are required.</span>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const requestId = params.get("request_id") || "";
+      document.getElementById("request_id").value = requestId;
+
+      // Prefill from DPD (if any data exists for this deal). All fields stay
+      // fully editable; missing values are simply left blank.
+      async function prefill() {
+        if (!requestId) return;
+        try {
+          const res = await fetch(
+            "/deal-info?request_id=" + encodeURIComponent(requestId)
+          );
+          if (!res.ok) return;
+          const data = await res.json();
+
+          let filledAny = false;
+          for (const [key, value] of Object.entries(data)) {
+            if (value === undefined || value === null || value === "") continue;
+            const el = document.getElementById(key);
+            if (!el) continue;
+
+            if (el.tagName === "SELECT") {
+              // Match option case-insensitively (e.g. "custom demo" -> "Custom Demo").
+              const wanted = String(value).trim().toLowerCase();
+              const match = [...el.options].find(
+                (o) => o.value.toLowerCase() === wanted
+              );
+              if (match) {
+                el.value = match.value;
+                filledAny = true;
+              }
+            } else {
+              el.value = value;
+              filledAny = true;
+            }
+          }
+
+          if (filledAny) {
+            document.getElementById("prefillBanner").hidden = false;
+          }
+        } catch (e) {
+          // Non-fatal: leave the form blank and editable.
+          console.warn("Prefill failed:", e);
+        }
+      }
+
+      prefill();
+
+      // Prevent double submits.
+      document.querySelector("form").addEventListener("submit", () => {
+        const btn = document.getElementById("submitBtn");
+        btn.disabled = true;
+        btn.textContent = "Submitting…";
+      });
+    </script>
+  </body>
+</html>
