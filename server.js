@@ -141,7 +141,7 @@ app.get("/deal-info", async (req, res) => {
     res.json({
       deal_id: val(record.DealId) || dealId,
       deal_name: val(record.ProjectName) || val(record.DealName),
-      se_email: val(record.SEName),
+      se_email: val(record.SE),
       ae_email: val(record.AEName),
       products: val(record.ProductsToBeUsed) || val(record.ProductsUsed),
       channels: val(record.Channels) || val(record.ChannelsUsed),
