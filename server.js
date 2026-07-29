@@ -138,11 +138,21 @@ app.get("/deal-info", async (req, res) => {
     return isNaN(d) ? "" : d.toISOString().slice(0, 10);
   };
 
+    const toKoreEmail = (v) => {
+    const s = val(v);
+    if (!s) return "";
+    if (s.includes("@")) return s.toLowerCase();            // already an email (e.g. SE)
+    const parts = s.toLowerCase().split(/\s+/).filter(Boolean);
+    if (parts.length === 1) return parts[0] + "@kore.com";  // single name
+    return `${parts[0]}.${parts[parts.length - 1]}@kore.com`; // first.last
+    };
+
+
     res.json({
       deal_id: val(record.DealId) || dealId,
       deal_name: val(record.ProjectName) || val(record.DealName),
-      se_email: val(record.SE),
-      ae_email: val(record.AEName),
+      se_email: toKoreEmail(record.SE),
+      ae_email: toKoreEmail(record.AE),
       products: val(record.ProductsToBeUsed) || val(record.ProductsUsed),
       channels: val(record.Channels) || val(record.ChannelsUsed),
       dry_run_date: toDateInput(record.DryRunDate),
