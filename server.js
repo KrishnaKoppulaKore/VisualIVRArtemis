@@ -129,6 +129,14 @@ app.get("/deal-info", async (req, res) => {
       const s = (v ?? "").toString().trim();
       return !s || s.toUpperCase() === "NA" ? "" : s;
     };
+    const toDateInput = (v) => {
+    const s = val(v);
+    if (!s) return "";
+    const m = s.match(/^(\d{2})-(\d{2})-(\d{4})$/);   // DD-MM-YYYY
+    if (m) return `${m[3]}-${m[2]}-${m[1]}`;
+    const d = new Date(s);                             // fallback for ISO, etc.
+    return isNaN(d) ? "" : d.toISOString().slice(0, 10);
+  };
 
     res.json({
       deal_id: val(record.DealId) || dealId,
@@ -137,8 +145,8 @@ app.get("/deal-info", async (req, res) => {
       ae_email: val(record.AEName),
       products: val(record.ProductsToBeUsed) || val(record.ProductsUsed),
       channels: val(record.Channels) || val(record.ChannelsUsed),
-      dry_run_date: val(record.DryRunDate),
-      demo_date: val(record.DemoDate),
+      dry_run_date: toDateInput(record.DryRunDate),
+      demo_date: toDateInput(record.DemoDate),
       demo_type: val(record.DemoType),
       third_party: val(record.ThirdParty),
       demo_region: val(record.demoRegion) || val(record.DemoRegion),
