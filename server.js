@@ -114,9 +114,12 @@ app.get("/deal-info", async (req, res) => {
     const dealId = entry?.dealId;
     if (!dealId) return res.json({});
 
-    const resp = await axios.get(process.env.DPD_PROCESS_URL, {
-      params: { DealId: dealId },
-      headers: { Authorization: process.env.DPD_AUTH },
+    const resp = await axios.get(process.env.SUPABASE_API_URL, {
+      params: { DealId: `eq.${dealId}` }, // PostgREST exact match syntax
+      headers: { 
+        apikey: process.env.SUPABASE_API_KEY,
+        Authorization: `Bearer ${process.env.SUPABASE_API_KEY}`
+      },
       timeout: 15000,
     });
 
@@ -210,8 +213,8 @@ app.post("/submit-form", async (req, res) => {
     // ---- Persist to DPD, in parallel ---------------------------------------
     // Fire-and-forget: kicked off WITHOUT await so it never blocks or delays
     // the Kore callback below. Errors are logged, not surfaced to the workflow.
-    storeToDpd(result).catch((e) =>
-      console.error("DPD store error:", e.response?.data || e.message)
+   storeToSupabase(result).catch((e) =>
+      console.error("Supabase store error:", e.response?.data || e.message)
     );
 
     // ---- Resume the workflow via the Kore callback -------------------------
@@ -261,7 +264,11 @@ app.post("/submit-form", async (req, res) => {
  * with (and never blocks) the Kore callback. Field names are mapped to the DPD
  * schema (DealId, SEName, ProductsUsed, ...).
  */
-async function storeToDpd(result) {
+/**
+ * Persist a demo request to Supabase. Called fire-and-forget so it runs in parallel
+ * with (and never blocks) the Kore callback.
+ */
+async function storeToSupabase(result) {
   const payload = {
     DealId: result.deal_id,
     DealName: result.deal_name,
@@ -276,15 +283,17 @@ async function storeToDpd(result) {
     DemoRegion: result.demo_region,
   };
 
-  const resp = await axios.post(process.env.DPD_URL, payload, {
+  const resp = await axios.post(process.env.SUPABASE_API_URL, payload, {
     headers: {
-      Authorization: process.env.DPD_AUTH,
+      apikey: process.env.SUPABASE_API_KEY,
+      Authorization: `Bearer ${process.env.SUPABASE_API_KEY}`,
       "Content-Type": "application/json",
+      "Prefer": "return=minimal" // Tells Supabase not to send the whole row back, saves bandwidth
     },
     timeout: 15000,
   });
 
-  console.log("Stored to DPD:", resp.data?.id || resp.status);
+  console.log("Stored to Supabase:", resp.status);
   return resp.data;
 }
 
