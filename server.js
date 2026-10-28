@@ -114,8 +114,8 @@ app.get("/deal-info", async (req, res) => {
     const dealId = entry?.dealId;
     if (!dealId) return res.json({});
 
-    const resp = await axios.get(process.env.SUPABASE_API_URL, {
-      params: { DealId: `eq.${dealId}` }, // PostgREST exact match syntax
+  const resp = await axios.get(process.env.SUPABASE_GET_URL, {
+      params: { DealId: `eq.${dealId}` },
       headers: { 
         apikey: process.env.SUPABASE_API_KEY,
         Authorization: `Bearer ${process.env.SUPABASE_API_KEY}`
@@ -283,12 +283,12 @@ async function storeToSupabase(result) {
     DemoRegion: result.demo_region,
   };
 
-  const resp = await axios.post(process.env.SUPABASE_API_URL, payload, {
+const resp = await axios.post(process.env.SUPABASE_POST_URL, payload, {
     headers: {
       apikey: process.env.SUPABASE_API_KEY,
       Authorization: `Bearer ${process.env.SUPABASE_API_KEY}`,
       "Content-Type": "application/json",
-      "Prefer": "return=minimal" // Tells Supabase not to send the whole row back, saves bandwidth
+      "Prefer": "return=minimal" 
     },
     timeout: 15000,
   });
